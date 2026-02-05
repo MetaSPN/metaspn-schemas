@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "metaspn-schemas"
+version = "0.1.0"
+description = "Canonical schemas for MetaSPN-compatible signal processing systems"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{ name = "MetaSPN" }]
+license = "MIT"
+license-files = ["LICENSE"]
+keywords = ["schemas", "signal-processing", "events", "dataclasses", "metaspn"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://github.com/MetaSPN/metaspn-schemas"
+Repository = "https://github.com/MetaSPN/metaspn-schemas"
+Issues = "https://github.com/MetaSPN/metaspn-schemas/issues"
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "build>=1.2.0", "twine>=5.0.0"]
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["test"]
