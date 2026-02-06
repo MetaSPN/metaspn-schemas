@@ -6,6 +6,7 @@ from metaspn_schemas.core import SignalEnvelope
 from metaspn_schemas.features import M1ProfileEnrichment, M1RoutingRecommendation, M1ScoreCard
 from metaspn_schemas.ingestion import NormalizedSocialPostSeenEvent, RawSocialPostSeenEvent
 from metaspn_schemas.learning import GateCalibrationRecommendation, PolicyOverrideReview
+from metaspn_schemas.outcomes import NoReplyObserved
 from metaspn_schemas.recommendations import ApprovalOverride, DraftMessage
 from metaspn_schemas.state_machine import parse_state_machine_config
 
@@ -189,3 +190,17 @@ def test_m3_backcompat_prior_minor_payload_defaults() -> None:
     assert review.applied_threshold_delta is None
     assert review.applied_cooldown_seconds_delta is None
     assert review.metadata == {}
+
+
+def test_demo_no_reply_backcompat_defaults() -> None:
+    legacy_payload = {
+        "no_reply_id": "nr_legacy",
+        "message_id": "msg_1",
+        "observed_at": "2026-02-06T20:00:00Z",
+        "wait_hours": 72,
+        "schema_version": "0.6",
+    }
+
+    no_reply = NoReplyObserved.from_dict(legacy_payload)
+    assert no_reply.reason == "timeout"
+    assert no_reply.metadata == {}

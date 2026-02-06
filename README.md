@@ -41,7 +41,7 @@ signal = SignalEnvelope(
     source="linkedin.webhook",
     payload_type="SocialPostSeen",
     payload={"post_id": "123", "platform": "linkedin"},
-    schema_version="0.6",
+    schema_version="0.7",
 )
 
 as_dict = signal.to_dict()
@@ -71,6 +71,7 @@ from metaspn_schemas import (
     DailyDigestEntry,
     DraftMessage,
     ApprovalOverride,
+    NoReplyObserved,
     LearningOutcomeWindow,
     FailureLabel,
     GateCalibrationRecommendation,
@@ -173,6 +174,18 @@ Optional: `applied_threshold_delta`, `applied_cooldown_seconds_delta`, `metadata
 
 All M3 timestamps are normalized to UTC and list/dict outputs are deterministic.
 
+## Demo Contract Subset
+
+`v0.7.0` verifies a canonical demo path across stages:
+
+- Ingestion/social: `NormalizedSocialPostSeenEvent`
+- Profile/scoring/routing: `M1ProfileEnrichment`, `M1ScoreCard`, `M1RoutingRecommendation`
+- Recommendation artifacts: `Recommendation`, `DailyDigestEntry`, `DraftMessage`
+- Outcomes: `NoReplyObserved` (synthetic/manual no-reply support), plus existing message/reply outcomes
+- Learning loop: `LearningOutcomeWindow`, `FailureLabel`, `GateCalibrationRecommendation`
+
+Focused demo serde tests ensure this subset runs without ad hoc payload classes.
+
 ## Package layout
 
 ```text
@@ -204,6 +217,7 @@ metaspn-schemas/
     test_m1_contracts.py
     test_m2_contracts.py
     test_m3_learning_contracts.py
+    test_demo_contracts.py
     test_state_machine.py
 ```
 

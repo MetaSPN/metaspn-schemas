@@ -28,6 +28,7 @@ from metaspn_schemas.learning import (
     PolicyOverrideReview,
 )
 from metaspn_schemas.outcomes import MeetingBooked, MessageSent, ReplyReceived, RevenueEvent
+from metaspn_schemas.outcomes import NoReplyObserved
 from metaspn_schemas.recommendations import (
     ApprovalOverride,
     DailyDigestEntry,
@@ -73,6 +74,7 @@ __all__ = [
     "M1ScoreCard",
     "MeetingBooked",
     "MessageSent",
+    "NoReplyObserved",
     "NormalizedSocialPostSeenEvent",
     "OutcomeWindowEvaluation",
     "PlaybookRouted",

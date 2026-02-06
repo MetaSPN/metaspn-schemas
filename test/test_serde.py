@@ -12,7 +12,7 @@ from metaspn_schemas.core import (
 )
 from metaspn_schemas.entities import EntityAliasAdded, EntityMerged, EntityResolved
 from metaspn_schemas.features import GameClassified, PlaybookRouted, ProfileEnriched, ScoresComputed
-from metaspn_schemas.outcomes import MeetingBooked, MessageSent, ReplyReceived, RevenueEvent
+from metaspn_schemas.outcomes import MeetingBooked, MessageSent, NoReplyObserved, ReplyReceived, RevenueEvent
 from metaspn_schemas.social import ProfileSnapshotSeen, SocialPostSeen
 from metaspn_schemas.state_machine import (
     CalibrationRecord,
@@ -99,6 +99,7 @@ def test_round_trip_social_outcomes_entities_features_state_fragments() -> None:
         ProfileSnapshotSeen("pr1", "linkedin", "@a", "A", "Bio", NOW, topics=("x", "c")),
         MessageSent("m1", "email", "x@example.com", NOW),
         ReplyReceived("rp1", "m1", "y@example.com", NOW),
+        NoReplyObserved("nr1", "m1", NOW, 72),
         MeetingBooked("mt1", "x@example.com", NOW, NOW, ("a", "b")),
         RevenueEvent("rev1", 120.5, "USD", NOW, "stripe"),
         EntityResolved("ent1", "resolver", NOW, 0.91),
@@ -141,6 +142,7 @@ def test_round_trip_social_outcomes_entities_features_state_fragments() -> None:
         ProfileSnapshotSeen,
         MessageSent,
         ReplyReceived,
+        NoReplyObserved,
         MeetingBooked,
         RevenueEvent,
         EntityResolved,

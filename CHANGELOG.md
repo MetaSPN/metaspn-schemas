@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.7.0] - 2026-02-06
+
+- Added `NoReplyObserved` outcome schema for synthetic/manual no-reply demo signals.
+- Added focused demo contract test coverage spanning ingestion, profile/score/route,
+  recommendation artifacts, outcomes, and learning-loop records.
+- Added backcompat default tests for `NoReplyObserved`.
+- Bumped default schema version to `0.7`.
+
 ## [0.6.0] - 2026-02-06
 
 - Added M3 learning contracts:
