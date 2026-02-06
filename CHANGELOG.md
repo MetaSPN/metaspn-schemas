@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.0] - 2026-02-06
+
+- Added ingestion contracts:
+  `RawSocialPostSeenEvent`, `NormalizedSocialPostSeenEvent`,
+  `IngestionParseErrorEvent`, and `ResolverHandoff`.
+- Added top-level exports for new ingestion/resolver schemas.
+- Added round-trip and backward-compatible serde tests for ingestion payload variants.
+- Bumped default schema version to `0.3`.
+
 ## [0.2.0] - 2026-02-06
 
 - Added state-machine contract schemas:

@@ -89,6 +89,25 @@ Versioning expectations:
 - Renames/type changes are breaking and require major bumps.
 - Each record carries `schema_version` for replay/backcompat handling.
 
+## Ingestion Contracts
+
+`v0.3.0` adds M0 ingestion + resolver handoff schemas:
+
+- `RawSocialPostSeenEvent`
+Required: `event_id`, `source`, `seen_at`, `raw`.
+Optional: `resolver_handoff`.
+- `NormalizedSocialPostSeenEvent`
+Required: `event_id`, `source`, `platform`, `post_id`, `author_handle`, `content`, `seen_at`.
+Optional: `post_url`, `topics`, `resolver_handoff`.
+- `IngestionParseErrorEvent`
+Required: `error_id`, `source`, `occurred_at`, `error_type`, `message`.
+Optional: `raw_payload`, `resolver_handoff`.
+- `ResolverHandoff`
+Required: `handoff_id`, `entity_ref`, `provenance_source`, `provenance_step`, `attached_at`.
+Optional provenance metadata: `metadata`.
+
+All ingestion timestamps are normalized to UTC on construction and serde output remains deterministic.
+
 ## Package layout
 
 ```text
@@ -103,6 +122,7 @@ metaspn-schemas/
     social.py
     outcomes.py
     features.py
+    ingestion.py
     state_machine.py
     state_fragments.py
     utils/
@@ -113,6 +133,7 @@ metaspn-schemas/
     test_serde.py
     test_ids.py
     test_backcompat.py
+    test_ingestion.py
     test_state_machine.py
 ```
 

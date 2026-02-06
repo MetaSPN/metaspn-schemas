@@ -12,7 +12,7 @@ git remote add origin git@github.com:MetaSPN/metaspn-schemas.git
 
 ```bash
 git add .
-git commit -m "release: metaspn-schemas v0.2.0"
+git commit -m "release: metaspn-schemas v0.3.0"
 git branch -M main
 git push -u origin main
 ```
@@ -42,11 +42,11 @@ python -m twine check dist/*
 1. Create and push tag:
 
 ```bash
-git tag v0.2.0
-git push origin v0.2.0
+git tag v0.3.0
+git push origin v0.3.0
 ```
 
-2. Create a GitHub Release for tag `v0.2.0`.
+2. Create a GitHub Release for tag `v0.3.0`.
 3. Publishing workflow runs automatically and uploads to PyPI.
 
 ## 6) Verify
@@ -56,7 +56,7 @@ git push origin v0.2.0
 - Install check:
 
 ```bash
-python -m pip install metaspn-schemas==0.2.0
+python -m pip install metaspn-schemas==0.3.0
 ```
 
 ## Version bump checklist

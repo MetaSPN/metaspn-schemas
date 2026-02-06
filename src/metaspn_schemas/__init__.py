@@ -12,6 +12,12 @@ from metaspn_schemas.features import (
     ProfileEnriched,
     ScoresComputed,
 )
+from metaspn_schemas.ingestion import (
+    IngestionParseErrorEvent,
+    NormalizedSocialPostSeenEvent,
+    RawSocialPostSeenEvent,
+    ResolverHandoff,
+)
 from metaspn_schemas.outcomes import MeetingBooked, MessageSent, ReplyReceived, RevenueEvent
 from metaspn_schemas.social import ProfileSnapshotSeen, SocialPostSeen
 from metaspn_schemas.state_machine import (
@@ -39,8 +45,10 @@ __all__ = [
     "Evidence",
     "GameClassified",
     "Identity",
+    "IngestionParseErrorEvent",
     "MeetingBooked",
     "MessageSent",
+    "NormalizedSocialPostSeenEvent",
     "OutcomeWindowEvaluation",
     "PlaybookRouted",
     "ProfileEnriched",
@@ -55,6 +63,8 @@ __all__ = [
     "ScoresComputed",
     "SignalEnvelope",
     "SocialPostSeen",
+    "RawSocialPostSeenEvent",
+    "ResolverHandoff",
     "Task",
     "TraceContext",
     "GateTransitionAttempt",
