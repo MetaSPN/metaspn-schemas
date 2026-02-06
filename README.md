@@ -41,7 +41,7 @@ signal = SignalEnvelope(
     source="linkedin.webhook",
     payload_type="SocialPostSeen",
     payload={"post_id": "123", "platform": "linkedin"},
-    schema_version="0.1",
+    schema_version="0.2",
 )
 
 as_dict = signal.to_dict()
@@ -59,8 +59,35 @@ from metaspn_schemas import (
     SocialPostSeen,
     ProfileEnriched,
     ScoresComputed,
+    StateMachineConfig,
+    GateTransitionAttempt,
+    OutcomeWindowEvaluation,
+    CalibrationRecord,
+    FailureTaxonomyRecord,
+    parse_state_machine_config,
+    validate_state_machine_config,
 )
 ```
+
+## Contract Surfaces
+
+`v0.2.0` adds canonical shared contracts for gate/state-machine coordination:
+
+- `StateMachineConfig` + `StateTransitionRule` for static machine configuration payloads.
+- `GateTransitionAttempt` for transition snapshot records.
+- `OutcomeWindowEvaluation` for downstream learning/evaluation windows.
+- `CalibrationRecord` + `FailureTaxonomyRecord` for calibration/failure taxonomy telemetry.
+
+Parse/validate hooks exposed at package top-level:
+
+- `parse_state_machine_config(payload)` for current + prior minor payload shape normalization.
+- `validate_state_machine_config(config_or_payload)` returning `(is_valid, errors)`.
+
+Versioning expectations:
+
+- Additive fields/types are backwards compatible and ship in minor bumps.
+- Renames/type changes are breaking and require major bumps.
+- Each record carries `schema_version` for replay/backcompat handling.
 
 ## Package layout
 
@@ -76,6 +103,7 @@ metaspn-schemas/
     social.py
     outcomes.py
     features.py
+    state_machine.py
     state_fragments.py
     utils/
       ids.py
@@ -85,6 +113,7 @@ metaspn-schemas/
     test_serde.py
     test_ids.py
     test_backcompat.py
+    test_state_machine.py
 ```
 
 ## Release

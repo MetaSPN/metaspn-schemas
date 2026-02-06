@@ -2,11 +2,26 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 
-from metaspn_schemas.core import EmissionEnvelope, EntityRef, SchemaVersion, SignalEnvelope, TraceContext
+from metaspn_schemas.core import (
+    DEFAULT_SCHEMA_VERSION,
+    EmissionEnvelope,
+    EntityRef,
+    SchemaVersion,
+    SignalEnvelope,
+    TraceContext,
+)
 from metaspn_schemas.entities import EntityAliasAdded, EntityMerged, EntityResolved
 from metaspn_schemas.features import GameClassified, PlaybookRouted, ProfileEnriched, ScoresComputed
 from metaspn_schemas.outcomes import MeetingBooked, MessageSent, ReplyReceived, RevenueEvent
 from metaspn_schemas.social import ProfileSnapshotSeen, SocialPostSeen
+from metaspn_schemas.state_machine import (
+    CalibrationRecord,
+    FailureTaxonomyRecord,
+    GateTransitionAttempt,
+    OutcomeWindowEvaluation,
+    StateMachineConfig,
+    StateTransitionRule,
+)
 from metaspn_schemas.state_fragments import Attempts, Cooldowns, Evidence, Identity, Scores
 from metaspn_schemas.tasks import Result, Task
 
@@ -98,6 +113,28 @@ def test_round_trip_social_outcomes_entities_features_state_fragments() -> None:
         Scores("ent1", {"intent": 0.2}, NOW),
         Cooldowns("ent1", "email", NOW),
         Attempts("ent1", 2, NOW),
+        StateTransitionRule("seen", "queued", "route"),
+        StateMachineConfig(
+            "cfg_1",
+            "default",
+            "seen",
+            ("queued", "seen"),
+            (StateTransitionRule("seen", "queued", "route"),),
+            terminal_states=("queued",),
+        ),
+        GateTransitionAttempt("att_1", "default_gate", "ent1", "seen", "queued", NOW, True),
+        OutcomeWindowEvaluation(
+            "ow_1",
+            "ent1",
+            NOW,
+            NOW,
+            NOW,
+            "reply",
+            True,
+            metrics={"lift": 0.15},
+        ),
+        CalibrationRecord("cal_1", "gate-calib-v1", NOW, 1000, 0.63, precision=0.8, recall=0.7),
+        FailureTaxonomyRecord("fail_1", "delivery", "EMAIL_BOUNCE", NOW, "high", tags=("retry", "smtp")),
     ]
     classes = [
         SocialPostSeen,
@@ -118,6 +155,12 @@ def test_round_trip_social_outcomes_entities_features_state_fragments() -> None:
         Scores,
         Cooldowns,
         Attempts,
+        StateTransitionRule,
+        StateMachineConfig,
+        GateTransitionAttempt,
+        OutcomeWindowEvaluation,
+        CalibrationRecord,
+        FailureTaxonomyRecord,
     ]
 
     for instance, cls in zip(instances, classes, strict=True):
@@ -171,3 +214,23 @@ def test_topic_lists_are_sorted_on_construction() -> None:
 
     assert post.topics == ("ai", "ml")
     assert enriched.topics == ("a", "z")
+
+
+def test_new_contract_schema_versions_default_to_current() -> None:
+    cfg = StateMachineConfig(
+        "cfg_1",
+        "default",
+        "seen",
+        ("seen", "queued"),
+        (StateTransitionRule("seen", "queued", "route"),),
+    )
+    attempt = GateTransitionAttempt("att_1", "default_gate", "ent1", "seen", "queued", NOW, True)
+    eval_record = OutcomeWindowEvaluation("ow_1", "ent1", NOW, NOW, NOW, "reply", True)
+    calibration = CalibrationRecord("cal_1", "gate-calib-v1", NOW, 1000, 0.6)
+    failure = FailureTaxonomyRecord("fail_1", "delivery", "EMAIL_BOUNCE", NOW, "high")
+
+    assert cfg.schema_version == DEFAULT_SCHEMA_VERSION
+    assert attempt.schema_version == DEFAULT_SCHEMA_VERSION
+    assert eval_record.schema_version == DEFAULT_SCHEMA_VERSION
+    assert calibration.schema_version == DEFAULT_SCHEMA_VERSION
+    assert failure.schema_version == DEFAULT_SCHEMA_VERSION

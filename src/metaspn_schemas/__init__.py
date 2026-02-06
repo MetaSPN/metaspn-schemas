@@ -14,11 +14,22 @@ from metaspn_schemas.features import (
 )
 from metaspn_schemas.outcomes import MeetingBooked, MessageSent, ReplyReceived, RevenueEvent
 from metaspn_schemas.social import ProfileSnapshotSeen, SocialPostSeen
+from metaspn_schemas.state_machine import (
+    CalibrationRecord,
+    FailureTaxonomyRecord,
+    GateTransitionAttempt,
+    OutcomeWindowEvaluation,
+    StateMachineConfig,
+    StateTransitionRule,
+    parse_state_machine_config,
+    validate_state_machine_config,
+)
 from metaspn_schemas.state_fragments import Attempts, Cooldowns, Evidence, Identity, Scores
 from metaspn_schemas.tasks import Result, Task
 
 __all__ = [
     "Attempts",
+    "CalibrationRecord",
     "Cooldowns",
     "EmissionEnvelope",
     "EntityAliasAdded",
@@ -30,9 +41,12 @@ __all__ = [
     "Identity",
     "MeetingBooked",
     "MessageSent",
+    "OutcomeWindowEvaluation",
     "PlaybookRouted",
     "ProfileEnriched",
     "ProfileSnapshotSeen",
+    "StateMachineConfig",
+    "StateTransitionRule",
     "ReplyReceived",
     "Result",
     "RevenueEvent",
@@ -43,4 +57,8 @@ __all__ = [
     "SocialPostSeen",
     "Task",
     "TraceContext",
+    "GateTransitionAttempt",
+    "FailureTaxonomyRecord",
+    "parse_state_machine_config",
+    "validate_state_machine_config",
 ]
