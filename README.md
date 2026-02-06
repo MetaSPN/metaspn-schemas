@@ -41,7 +41,7 @@ signal = SignalEnvelope(
     source="linkedin.webhook",
     payload_type="SocialPostSeen",
     payload={"post_id": "123", "platform": "linkedin"},
-    schema_version="0.4",
+    schema_version="0.5",
 )
 
 as_dict = signal.to_dict()
@@ -67,6 +67,10 @@ from metaspn_schemas import (
     M1ProfileEnrichment,
     M1ScoreCard,
     M1RoutingRecommendation,
+    Recommendation,
+    DailyDigestEntry,
+    DraftMessage,
+    ApprovalOverride,
     parse_state_machine_config,
     validate_state_machine_config,
 )
@@ -127,6 +131,25 @@ Optional metadata: `metadata`.
 
 All M1 timestamps are normalized to UTC and dict outputs are serialized deterministically.
 
+## M2 Recommendation Contracts
+
+`v0.5.0` adds canonical recommendation and human-approval artifacts:
+
+- `Recommendation`
+Required: `recommendation_id`, `entity_id`, `playbook`, `score`, `rationale`, `priority`, `created_at`.
+Optional metadata: `metadata`.
+- `DailyDigestEntry`
+Required: `digest_entry_id`, `entity_id`, `rank`, `action_item`, `created_at`.
+Optional metadata: `metadata`.
+- `DraftMessage`
+Required: `draft_id`, `entity_id`, `channel`, `body`, `tone`, `created_at`.
+Optional: `subject`, `constraints`, `metadata`.
+- `ApprovalOverride`
+Required: `approval_id`, `draft_id`, `status`, `reason`, `reviewed_at`.
+Optional: `edited_subject`, `edited_body`, `reviewer`, `metadata`.
+
+All M2 timestamps are normalized to UTC and serialization remains deterministic.
+
 ## Package layout
 
 ```text
@@ -140,6 +163,7 @@ metaspn-schemas/
     entities.py
     social.py
     outcomes.py
+    recommendations.py
     features.py
     ingestion.py
     state_machine.py
@@ -154,6 +178,7 @@ metaspn-schemas/
     test_backcompat.py
     test_ingestion.py
     test_m1_contracts.py
+    test_m2_contracts.py
     test_state_machine.py
 ```
 

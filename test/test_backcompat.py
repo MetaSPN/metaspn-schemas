@@ -5,6 +5,7 @@ from datetime import datetime, timezone
 from metaspn_schemas.core import SignalEnvelope
 from metaspn_schemas.features import M1ProfileEnrichment, M1RoutingRecommendation, M1ScoreCard
 from metaspn_schemas.ingestion import NormalizedSocialPostSeenEvent, RawSocialPostSeenEvent
+from metaspn_schemas.recommendations import ApprovalOverride, DraftMessage
 from metaspn_schemas.state_machine import parse_state_machine_config
 
 
@@ -125,3 +126,34 @@ def test_m1_backcompat_prior_minor_payload_defaults() -> None:
     assert profile.metadata == {}
     assert score.scorer_metadata == {}
     assert route.metadata == {}
+
+
+def test_m2_backcompat_prior_minor_payload_defaults() -> None:
+    legacy_draft = {
+        "draft_id": "drf_legacy",
+        "entity_id": "ent_1",
+        "channel": "email",
+        "body": "hello",
+        "tone": "professional",
+        "created_at": "2026-02-06T15:00:00Z",
+        "schema_version": "0.4",
+    }
+    legacy_approval = {
+        "approval_id": "apr_legacy",
+        "draft_id": "drf_legacy",
+        "status": "approved",
+        "reason": "looks fine",
+        "reviewed_at": "2026-02-06T15:00:00Z",
+        "schema_version": "0.4",
+    }
+
+    draft = DraftMessage.from_dict(legacy_draft)
+    approval = ApprovalOverride.from_dict(legacy_approval)
+
+    assert draft.subject is None
+    assert draft.constraints == ()
+    assert draft.metadata == {}
+    assert approval.edited_subject is None
+    assert approval.edited_body is None
+    assert approval.reviewer is None
+    assert approval.metadata == {}

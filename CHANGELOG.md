@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.5.0] - 2026-02-06
+
+- Added M2 recommendation contracts:
+  `Recommendation`, `DailyDigestEntry`, `DraftMessage`, and `ApprovalOverride`.
+- Exported new M2 contracts from top-level `metaspn_schemas` package surface.
+- Added round-trip and backcompat tests for M2 payload variants.
+- Bumped default schema version to `0.5`.
+
 ## [0.4.0] - 2026-02-06
 
 - Added canonical M1 contracts:

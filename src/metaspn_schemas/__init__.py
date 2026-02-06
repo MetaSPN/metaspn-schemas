@@ -22,6 +22,12 @@ from metaspn_schemas.ingestion import (
     ResolverHandoff,
 )
 from metaspn_schemas.outcomes import MeetingBooked, MessageSent, ReplyReceived, RevenueEvent
+from metaspn_schemas.recommendations import (
+    ApprovalOverride,
+    DailyDigestEntry,
+    DraftMessage,
+    Recommendation,
+)
 from metaspn_schemas.social import ProfileSnapshotSeen, SocialPostSeen
 from metaspn_schemas.state_machine import (
     CalibrationRecord,
@@ -49,6 +55,10 @@ __all__ = [
     "GameClassified",
     "Identity",
     "IngestionParseErrorEvent",
+    "DraftMessage",
+    "DailyDigestEntry",
+    "Recommendation",
+    "ApprovalOverride",
     "M1ProfileEnrichment",
     "M1RoutingRecommendation",
     "M1ScoreCard",
