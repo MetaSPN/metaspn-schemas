@@ -3,6 +3,7 @@ from __future__ import annotations
 from datetime import datetime, timezone
 
 from metaspn_schemas.core import SignalEnvelope
+from metaspn_schemas.features import M1ProfileEnrichment, M1RoutingRecommendation, M1ScoreCard
 from metaspn_schemas.ingestion import NormalizedSocialPostSeenEvent, RawSocialPostSeenEvent
 from metaspn_schemas.state_machine import parse_state_machine_config
 
@@ -83,3 +84,44 @@ def test_normalized_ingestion_backcompat_prior_minor_payload() -> None:
     assert event.post_url is None
     assert event.topics == ()
     assert event.resolver_handoff is None
+
+
+def test_m1_backcompat_prior_minor_payload_defaults() -> None:
+    profile_payload = {
+        "enrichment_id": "m1p_legacy",
+        "entity_id": "ent_1",
+        "enriched_at": "2026-02-06T12:00:00Z",
+        "role": "Head of Sales",
+        "organization": "Acme",
+        "topics": ["ai", "outbound"],
+        "evidence_summary": "legacy payload without metadata",
+        "schema_version": "0.3",
+    }
+    score_payload = {
+        "score_id": "m1s_legacy",
+        "entity_id": "ent_1",
+        "computed_at": "2026-02-06T12:00:00Z",
+        "fit": 0.7,
+        "quality": 0.6,
+        "reply_likelihood": 0.5,
+        "scorer": "legacy",
+        "schema_version": "0.3",
+    }
+    route_payload = {
+        "recommendation_id": "m1r_legacy",
+        "entity_id": "ent_1",
+        "recommended_at": "2026-02-06T12:00:00Z",
+        "playbook": "warm_outbound",
+        "rationale": "legacy payload without metadata",
+        "priority": 2,
+        "suggested_action": "send_intro_message",
+        "schema_version": "0.3",
+    }
+
+    profile = M1ProfileEnrichment.from_dict(profile_payload)
+    score = M1ScoreCard.from_dict(score_payload)
+    route = M1RoutingRecommendation.from_dict(route_payload)
+
+    assert profile.metadata == {}
+    assert score.scorer_metadata == {}
+    assert route.metadata == {}

@@ -8,6 +8,9 @@ from metaspn_schemas.core import (
 from metaspn_schemas.entities import EntityAliasAdded, EntityMerged, EntityResolved
 from metaspn_schemas.features import (
     GameClassified,
+    M1ProfileEnrichment,
+    M1RoutingRecommendation,
+    M1ScoreCard,
     PlaybookRouted,
     ProfileEnriched,
     ScoresComputed,
@@ -46,6 +49,9 @@ __all__ = [
     "GameClassified",
     "Identity",
     "IngestionParseErrorEvent",
+    "M1ProfileEnrichment",
+    "M1RoutingRecommendation",
+    "M1ScoreCard",
     "MeetingBooked",
     "MessageSent",
     "NormalizedSocialPostSeenEvent",

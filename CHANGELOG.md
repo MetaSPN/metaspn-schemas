@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.0] - 2026-02-06
+
+- Added canonical M1 contracts:
+  `M1ProfileEnrichment`, `M1ScoreCard`, and `M1RoutingRecommendation`.
+- Exported M1 contracts from top-level `metaspn_schemas` import surface.
+- Normalized feature payload datetimes to UTC for deterministic, timezone-safe serialization.
+- Added M1 tests for round-trip serde, deterministic dict ordering, and backcompat defaults.
+- Bumped default schema version to `0.4`.
+
 ## [0.3.0] - 2026-02-06
 
 - Added ingestion contracts:

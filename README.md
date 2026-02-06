@@ -41,7 +41,7 @@ signal = SignalEnvelope(
     source="linkedin.webhook",
     payload_type="SocialPostSeen",
     payload={"post_id": "123", "platform": "linkedin"},
-    schema_version="0.2",
+    schema_version="0.4",
 )
 
 as_dict = signal.to_dict()
@@ -64,6 +64,9 @@ from metaspn_schemas import (
     OutcomeWindowEvaluation,
     CalibrationRecord,
     FailureTaxonomyRecord,
+    M1ProfileEnrichment,
+    M1ScoreCard,
+    M1RoutingRecommendation,
     parse_state_machine_config,
     validate_state_machine_config,
 )
@@ -108,6 +111,22 @@ Optional provenance metadata: `metadata`.
 
 All ingestion timestamps are normalized to UTC on construction and serde output remains deterministic.
 
+## M1 Profile/Score/Route Contracts
+
+`v0.4.0` adds canonical M1 payloads for profile enrichment, scoring, and routing:
+
+- `M1ProfileEnrichment`
+Required: `enrichment_id`, `entity_id`, `enriched_at`, `role`, `organization`, `topics`, `evidence_summary`.
+Optional metadata: `metadata`.
+- `M1ScoreCard`
+Required: `score_id`, `entity_id`, `computed_at`, `fit`, `quality`, `reply_likelihood`, `scorer`.
+Optional scorer metadata: `scorer_metadata`.
+- `M1RoutingRecommendation`
+Required: `recommendation_id`, `entity_id`, `recommended_at`, `playbook`, `rationale`, `priority`, `suggested_action`.
+Optional metadata: `metadata`.
+
+All M1 timestamps are normalized to UTC and dict outputs are serialized deterministically.
+
 ## Package layout
 
 ```text
@@ -134,6 +153,7 @@ metaspn-schemas/
     test_ids.py
     test_backcompat.py
     test_ingestion.py
+    test_m1_contracts.py
     test_state_machine.py
 ```
 
