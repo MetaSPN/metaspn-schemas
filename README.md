@@ -41,7 +41,7 @@ signal = SignalEnvelope(
     source="linkedin.webhook",
     payload_type="SocialPostSeen",
     payload={"post_id": "123", "platform": "linkedin"},
-    schema_version="0.5",
+    schema_version="0.6",
 )
 
 as_dict = signal.to_dict()
@@ -71,6 +71,10 @@ from metaspn_schemas import (
     DailyDigestEntry,
     DraftMessage,
     ApprovalOverride,
+    LearningOutcomeWindow,
+    FailureLabel,
+    GateCalibrationRecommendation,
+    PolicyOverrideReview,
     parse_state_machine_config,
     validate_state_machine_config,
 )
@@ -150,6 +154,25 @@ Optional: `edited_subject`, `edited_body`, `reviewer`, `metadata`.
 
 All M2 timestamps are normalized to UTC and serialization remains deterministic.
 
+## M3 Learning Contracts
+
+`v0.6.0` adds canonical learning-loop artifacts:
+
+- `LearningOutcomeWindow`
+Required: `window_id`, `entity_id`, `attempted_at`, `window_start`, `window_end`, `outcome`, `success`.
+Optional: `metrics`.
+- `FailureLabel`
+Required: `label_id`, `entity_id`, `category`, `code`, `evidence`, `labeled_at`.
+Optional: `metadata`.
+- `GateCalibrationRecommendation`
+Required: `recommendation_id`, `gate_name`, `created_at`, `threshold_delta`, `cooldown_seconds_delta`, `confidence`, `rationale`.
+Optional: `based_on_windows`, `metadata`.
+- `PolicyOverrideReview`
+Required: `review_id`, `recommendation_id`, `decision`, `reviewed_at`, `reviewer`, `reason`.
+Optional: `applied_threshold_delta`, `applied_cooldown_seconds_delta`, `metadata`.
+
+All M3 timestamps are normalized to UTC and list/dict outputs are deterministic.
+
 ## Package layout
 
 ```text
@@ -164,6 +187,7 @@ metaspn-schemas/
     social.py
     outcomes.py
     recommendations.py
+    learning.py
     features.py
     ingestion.py
     state_machine.py
@@ -179,6 +203,7 @@ metaspn-schemas/
     test_ingestion.py
     test_m1_contracts.py
     test_m2_contracts.py
+    test_m3_learning_contracts.py
     test_state_machine.py
 ```
 

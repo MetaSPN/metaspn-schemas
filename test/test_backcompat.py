@@ -5,6 +5,7 @@ from datetime import datetime, timezone
 from metaspn_schemas.core import SignalEnvelope
 from metaspn_schemas.features import M1ProfileEnrichment, M1RoutingRecommendation, M1ScoreCard
 from metaspn_schemas.ingestion import NormalizedSocialPostSeenEvent, RawSocialPostSeenEvent
+from metaspn_schemas.learning import GateCalibrationRecommendation, PolicyOverrideReview
 from metaspn_schemas.recommendations import ApprovalOverride, DraftMessage
 from metaspn_schemas.state_machine import parse_state_machine_config
 
@@ -157,3 +158,34 @@ def test_m2_backcompat_prior_minor_payload_defaults() -> None:
     assert approval.edited_body is None
     assert approval.reviewer is None
     assert approval.metadata == {}
+
+
+def test_m3_backcompat_prior_minor_payload_defaults() -> None:
+    legacy_recommendation = {
+        "recommendation_id": "gcr_legacy",
+        "gate_name": "email_gate",
+        "created_at": "2026-02-06T18:00:00Z",
+        "threshold_delta": -0.05,
+        "cooldown_seconds_delta": 3600,
+        "confidence": 0.8,
+        "rationale": "legacy payload without windows",
+        "schema_version": "0.5",
+    }
+    legacy_review = {
+        "review_id": "por_legacy",
+        "recommendation_id": "gcr_legacy",
+        "decision": "approved",
+        "reviewed_at": "2026-02-06T18:00:00Z",
+        "reviewer": "ops@metaspn",
+        "reason": "looks good",
+        "schema_version": "0.5",
+    }
+
+    recommendation = GateCalibrationRecommendation.from_dict(legacy_recommendation)
+    review = PolicyOverrideReview.from_dict(legacy_review)
+
+    assert recommendation.based_on_windows == ()
+    assert recommendation.metadata == {}
+    assert review.applied_threshold_delta is None
+    assert review.applied_cooldown_seconds_delta is None
+    assert review.metadata == {}

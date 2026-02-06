@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.6.0] - 2026-02-06
+
+- Added M3 learning contracts:
+  `LearningOutcomeWindow`, `FailureLabel`,
+  `GateCalibrationRecommendation`, and `PolicyOverrideReview`.
+- Exported new M3 contracts from top-level `metaspn_schemas` package surface.
+- Added round-trip, deterministic-ordering, and backcompat tests for M3 payload variants.
+- Bumped default schema version to `0.6`.
+
 ## [0.5.0] - 2026-02-06
 
 - Added M2 recommendation contracts:

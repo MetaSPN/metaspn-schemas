@@ -21,6 +21,12 @@ from metaspn_schemas.ingestion import (
     RawSocialPostSeenEvent,
     ResolverHandoff,
 )
+from metaspn_schemas.learning import (
+    FailureLabel,
+    GateCalibrationRecommendation,
+    LearningOutcomeWindow,
+    PolicyOverrideReview,
+)
 from metaspn_schemas.outcomes import MeetingBooked, MessageSent, ReplyReceived, RevenueEvent
 from metaspn_schemas.recommendations import (
     ApprovalOverride,
@@ -59,6 +65,9 @@ __all__ = [
     "DailyDigestEntry",
     "Recommendation",
     "ApprovalOverride",
+    "FailureLabel",
+    "GateCalibrationRecommendation",
+    "LearningOutcomeWindow",
     "M1ProfileEnrichment",
     "M1RoutingRecommendation",
     "M1ScoreCard",
@@ -74,6 +83,7 @@ __all__ = [
     "ReplyReceived",
     "Result",
     "RevenueEvent",
+    "PolicyOverrideReview",
     "SchemaVersion",
     "Scores",
     "ScoresComputed",
