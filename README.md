@@ -41,7 +41,7 @@ signal = SignalEnvelope(
     source="linkedin.webhook",
     payload_type="SocialPostSeen",
     payload={"post_id": "123", "platform": "linkedin"},
-    schema_version="0.7",
+    schema_version="0.8",
 )
 
 as_dict = signal.to_dict()
@@ -72,6 +72,15 @@ from metaspn_schemas import (
     DraftMessage,
     ApprovalOverride,
     NoReplyObserved,
+    NoReply,
+    TokenSignalSeen,
+    PromiseRegistered,
+    PromiseEvaluated,
+    TokenHealthScoreCard,
+    TokenOutcomeObserved,
+    TokenOutcomeWindow,
+    PromisePredictiveAccuracy,
+    CreatorBehaviorCorrelation,
     LearningOutcomeWindow,
     FailureLabel,
     GateCalibrationRecommendation,
@@ -186,6 +195,22 @@ All M3 timestamps are normalized to UTC and list/dict outputs are deterministic.
 
 Focused demo serde tests ensure this subset runs without ad hoc payload classes.
 
+## Token/Promise Contracts
+
+`v0.8.0` adds canonical token/promise lifecycle contracts:
+
+- `TokenSignalSeen`
+- `PromiseRegistered`
+- `PromiseEvaluated`
+- `TokenHealthScoreCard`
+- `TokenOutcomeObserved`
+- `TokenOutcomeWindow`
+- `PromisePredictiveAccuracy`
+- `CreatorBehaviorCorrelation`
+- `NoReply` (explicit alias-style no-reply schema support in addition to `NoReplyObserved`)
+
+These contracts use deterministic dict serialization and UTC-normalized timestamps.
+
 ## Package layout
 
 ```text
@@ -199,6 +224,7 @@ metaspn-schemas/
     entities.py
     social.py
     outcomes.py
+    token_promises.py
     recommendations.py
     learning.py
     features.py
@@ -217,6 +243,7 @@ metaspn-schemas/
     test_m1_contracts.py
     test_m2_contracts.py
     test_m3_learning_contracts.py
+    test_token_promises.py
     test_demo_contracts.py
     test_state_machine.py
 ```

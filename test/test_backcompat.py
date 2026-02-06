@@ -6,9 +6,10 @@ from metaspn_schemas.core import SignalEnvelope
 from metaspn_schemas.features import M1ProfileEnrichment, M1RoutingRecommendation, M1ScoreCard
 from metaspn_schemas.ingestion import NormalizedSocialPostSeenEvent, RawSocialPostSeenEvent
 from metaspn_schemas.learning import GateCalibrationRecommendation, PolicyOverrideReview
-from metaspn_schemas.outcomes import NoReplyObserved
+from metaspn_schemas.outcomes import NoReply, NoReplyObserved
 from metaspn_schemas.recommendations import ApprovalOverride, DraftMessage
 from metaspn_schemas.state_machine import parse_state_machine_config
+from metaspn_schemas.token_promises import PromiseRegistered, TokenSignalSeen
 
 
 def test_signal_backcompat_prior_minor_payload() -> None:
@@ -204,3 +205,42 @@ def test_demo_no_reply_backcompat_defaults() -> None:
     no_reply = NoReplyObserved.from_dict(legacy_payload)
     assert no_reply.reason == "timeout"
     assert no_reply.metadata == {}
+
+
+def test_no_reply_backcompat_defaults() -> None:
+    legacy_payload = {
+        "no_reply_id": "nr_legacy_2",
+        "message_id": "msg_2",
+        "observed_at": "2026-02-06T20:00:00Z",
+        "wait_hours": 48,
+        "schema_version": "0.7",
+    }
+    no_reply = NoReply.from_dict(legacy_payload)
+    assert no_reply.reason == "timeout"
+    assert no_reply.metadata == {}
+
+
+def test_token_promise_backcompat_prior_minor_payload_defaults() -> None:
+    legacy_signal = {
+        "token_signal_id": "ts_legacy",
+        "token_id": "tok_1",
+        "creator_id": "cr_1",
+        "signal_type": "mention",
+        "seen_at": "2026-02-06T22:00:00Z",
+        "schema_version": "0.7",
+    }
+    legacy_registered = {
+        "promise_id": "pr_legacy",
+        "token_id": "tok_1",
+        "creator_id": "cr_1",
+        "registered_at": "2026-02-06T22:00:00Z",
+        "promise_text": "Ship by Friday",
+        "schema_version": "0.7",
+    }
+
+    signal = TokenSignalSeen.from_dict(legacy_signal)
+    registered = PromiseRegistered.from_dict(legacy_registered)
+
+    assert signal.metadata == {}
+    assert registered.source is None
+    assert registered.metadata == {}

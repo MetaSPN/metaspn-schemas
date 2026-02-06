@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.8.0] - 2026-02-06
+
+- Added token/promise schema contracts:
+  `TokenSignalSeen`, `PromiseRegistered`, `PromiseEvaluated`,
+  `TokenHealthScoreCard`, `TokenOutcomeObserved`, `TokenOutcomeWindow`,
+  `PromisePredictiveAccuracy`, and `CreatorBehaviorCorrelation`.
+- Added explicit `NoReply` schema support alongside `NoReplyObserved`.
+- Exported new contracts from top-level package surface.
+- Added serde + backcompat tests for token/promise and no-reply payloads.
+- Bumped default schema version to `0.8`.
+
 ## [0.7.0] - 2026-02-06
 
 - Added `NoReplyObserved` outcome schema for synthetic/manual no-reply demo signals.

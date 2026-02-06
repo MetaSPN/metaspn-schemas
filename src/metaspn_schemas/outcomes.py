@@ -73,3 +73,17 @@ class NoReplyObserved(Serializable):
 
     def __post_init__(self) -> None:
         object.__setattr__(self, "observed_at", ensure_utc(self.observed_at))
+
+
+@dataclass(frozen=True)
+class NoReply(Serializable):
+    no_reply_id: str
+    message_id: str
+    observed_at: datetime
+    wait_hours: int
+    schema_version: str = DEFAULT_SCHEMA_VERSION
+    reason: str = "timeout"
+    metadata: dict[str, str] = field(default_factory=dict)
+
+    def __post_init__(self) -> None:
+        object.__setattr__(self, "observed_at", ensure_utc(self.observed_at))
