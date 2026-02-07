@@ -8,6 +8,7 @@ from metaspn_schemas.ingestion import NormalizedSocialPostSeenEvent, RawSocialPo
 from metaspn_schemas.learning import GateCalibrationRecommendation, PolicyOverrideReview
 from metaspn_schemas.outcomes import NoReply, NoReplyObserved
 from metaspn_schemas.recommendations import ApprovalOverride, DraftMessage
+from metaspn_schemas.season1 import parse_reward_claim, parse_season_account_view
 from metaspn_schemas.state_machine import parse_state_machine_config
 from metaspn_schemas.token_promises import PromiseRegistered, TokenSignalSeen
 
@@ -244,3 +245,41 @@ def test_token_promise_backcompat_prior_minor_payload_defaults() -> None:
     assert signal.metadata == {}
     assert registered.source is None
     assert registered.metadata == {}
+
+
+def test_season1_backcompat_chain_alias_payloads() -> None:
+    legacy_season = {
+        "seasonId": 1,
+        "authorityPubkey": "auth_legacy",
+        "towelMint": "mint_legacy",
+        "active": True,
+        "startTs": 1762502400,
+        "endTs": 1765180800,
+        "rewardPoolTotal": 1000,
+        "rewardPoolRemaining": 800,
+        "totalStaked": 400,
+        "founderLockedTotal": 100,
+        "schema_version": "0.8",
+    }
+    legacy_claim = {
+        "claimId": "rc_legacy",
+        "owner": "player_legacy",
+        "seasonId": 1,
+        "claimedAt": "2026-02-07T16:00:00Z",
+        "amount": 200,
+        "status": "claimed",
+        "tx_sig": "abc123",
+        "schema_version": "0.8",
+    }
+
+    season = parse_season_account_view(legacy_season)
+    claim = parse_reward_claim(legacy_claim)
+
+    assert season.season_id == 1
+    assert season.authority == "auth_legacy"
+    assert season.towel_mint == "mint_legacy"
+    assert season.started_at == datetime(2025, 11, 7, 8, 0, tzinfo=timezone.utc)
+    assert season.ended_at == datetime(2025, 12, 8, 8, 0, tzinfo=timezone.utc)
+    assert season.reward_pool_total == 1000
+    assert claim.claim_id == "rc_legacy"
+    assert claim.transaction_signature == "abc123"

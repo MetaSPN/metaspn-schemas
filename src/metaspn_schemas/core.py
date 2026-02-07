@@ -7,7 +7,7 @@ from typing import Any
 from metaspn_schemas.utils.serde import Serializable
 from metaspn_schemas.utils.time import ensure_utc
 
-DEFAULT_SCHEMA_VERSION = "0.8"
+DEFAULT_SCHEMA_VERSION = "0.9"
 
 
 @dataclass(frozen=True)

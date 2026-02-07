@@ -41,7 +41,7 @@ signal = SignalEnvelope(
     source="linkedin.webhook",
     payload_type="SocialPostSeen",
     payload={"post_id": "123", "platform": "linkedin"},
-    schema_version="0.8",
+    schema_version="0.9",
 )
 
 as_dict = signal.to_dict()
@@ -81,12 +81,22 @@ from metaspn_schemas import (
     TokenOutcomeWindow,
     PromisePredictiveAccuracy,
     CreatorBehaviorCorrelation,
+    SeasonAccountView,
+    GameAccountView,
+    StakeAccountView,
+    PlayerAccountView,
+    FounderStakeView,
+    AttentionScoreUpdate,
+    RewardProjection,
+    RewardClaim,
     LearningOutcomeWindow,
     FailureLabel,
     GateCalibrationRecommendation,
     PolicyOverrideReview,
     parse_state_machine_config,
     validate_state_machine_config,
+    parse_season1_payload,
+    validate_season1_payload,
 )
 ```
 
@@ -210,6 +220,26 @@ Focused demo serde tests ensure this subset runs without ad hoc payload classes.
 - `NoReply` (explicit alias-style no-reply schema support in addition to `NoReplyObserved`)
 
 These contracts use deterministic dict serialization and UTC-normalized timestamps.
+
+## Season 1 Contracts
+
+`v0.9.0` adds canonical Season 1 account/reward contracts:
+
+- `SeasonAccountView`
+- `GameAccountView`
+- `StakeAccountView`
+- `PlayerAccountView`
+- `FounderStakeView`
+- `AttentionScoreUpdate`
+- `RewardProjection`
+- `RewardClaim`
+
+Season 1 parser/validator hooks exposed at package top-level:
+
+- `parse_season1_payload(payload_type, payload)` for canonical payload parsing.
+- `validate_season1_payload(payload_type, payload_or_obj)` returning `(is_valid, errors)`.
+
+Per-type parse/validate helpers are also exported for targeted consumers and tests.
 
 ## Package layout
 

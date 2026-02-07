@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.9.0] - 2026-02-07
+
+- Added canonical Season 1 contracts:
+  `SeasonAccountView`, `GameAccountView`, `StakeAccountView`,
+  `PlayerAccountView`, `FounderStakeView`, `AttentionScoreUpdate`,
+  `RewardProjection`, and `RewardClaim`.
+- Added Season 1 parser/validator entrypoints for account/reward payload families:
+  `parse_season1_payload` and `validate_season1_payload`,
+  plus per-type parse/validate helpers.
+- Added top-level exports for all new Season 1 contracts and helpers.
+- Added round-trip, deterministic serialization, UTC normalization, and backcompat tests
+  for Season 1 payload variants.
+- Bumped default schema version to `0.9`.
+
 ## [0.8.0] - 2026-02-06
 
 - Added token/promise schema contracts:
